@@ -5,24 +5,42 @@ import MessagePage from './messagePage'
 import { subscribe } from 'graphql'
 import Header from './header'
 
-const GET_MESSAGES = channelId => gql`
-{
-  channel(id: ${channelId}){
-    id
-    name
-    messages{
-      user{
-        name
+const GET_MESSAGES = gql`
+  query($channelId: ID!) {
+    listMessages(channelId: $channelId) {
+      messages {
+        user {
+          name
+          id
+          avatarUrl
+        }
         id
-        avatarUrl
+        message
+        edited
+        insertedAt
       }
-      id
-      message
-      edited
-      insertedAt 
+      cursor
     }
   }
-}
+`
+
+const GET_MORE = gql`
+  query($channelId: ID!, $cursor: String!) {
+    listMessages(channelId: $channelId, cursor: $cursor) {
+      messages {
+        user {
+          name
+          id
+          avatarUrl
+        }
+        id
+        message
+        edited
+        insertedAt
+      }
+      cursor
+    }
+  }
 `
 
 const MESSAGES_SUBSCRIPTION = gql`
@@ -57,25 +75,6 @@ const MESSAGES_SUBSCRIPTION_UPDATE = gql`
   }
 `
 
-const MESSAGES_SUBSCRIPTION_MORE = gql`
-  subscription($channelId: ID!) {
-    moreMessage(channelId: $channelId) {
-      messages{
-        user {
-          name
-          id
-          avatarUrl
-        }
-        id
-        message
-        edited
-        insertedAt
-      }
-      cursor
-    }
-  }
-`
-
 const GET_CURRENT_CHANNEL = gql`
   query {
     clientInfo @client {
@@ -84,13 +83,13 @@ const GET_CURRENT_CHANNEL = gql`
   }
 `
 
-
-
 const MessageQuery = ({ channelId }) =>
-  <Query query={GET_MESSAGES(channelId)}>
-    {({ subscribeToMore, ...result }) =>
+  <Query query={GET_MESSAGES} variables={{ channelId }}>
+    {({ subscribeToMore, ...result, fetchMore, data }) =>
       <MessagePage
         {...result}
+        data={data}
+        currentChannel={channelId}
         subscribeToNewMessages={() =>
           subscribeToMore({
             document: MESSAGES_SUBSCRIPTION,
@@ -98,13 +97,11 @@ const MessageQuery = ({ channelId }) =>
             updateQuery: (prev, { subscriptionData }) => {
               if (!subscriptionData.data) return prev
               const newMessage = subscriptionData.data.newMessage
-
               return Object.assign({}, prev, {
-                channel: {
-                  __typename: prev.channel.__typename,
-                  id: prev.channel.id,
-                  name: prev.channel.name,
-                  messages: [...prev.channel.messages, newMessage]
+                listMessages: {
+                  __typename: prev.listMessages.__typename,
+                  messages: [newMessage, ...prev.listMessages.messages],
+                  cursor: prev.listMessages.cursor
                 }
               })
             }
@@ -116,38 +113,41 @@ const MessageQuery = ({ channelId }) =>
             updateQuery: (prev, { subscriptionData }) => {
               if (!subscriptionData.data) return prev
               const updatedMessage = subscriptionData.data.updateMessage
-              const index = prev.channel.messages.findIndex(
+              const index = prev.listMessages.messages.findIndex(
                 m => m.id === updatedMessage.id
               )
-              const head = prev.channel.messages.slice(0, index)
-              const tail = prev.channel.messages.slice(index + 1)
+              const head = prev.listMessages.messages.slice(0, index)
+              const tail = prev.listMessages.messages.slice(index + 1)
               return Object.assign({}, prev, {
-                channel: {
-                  __typename: prev.channel.__typename,
-                  id: prev.channel.id,
-                  name: prev.channel.name,
-                  messages: [...head, updatedMessage, ...tail]
+                listMessages: {
+                  __typename: prev.listMessages.__typename,
+                  messages: [...head, updatedMessage, ...tail],
+                  cursor: prev.listMessages.cursor
                 }
               })
             }
           })}
-          subscribeToUpdate={() =>
-            subscribeToMore({
-              document: MESSAGES_SUBSCRIPTION_MORE,
-              variables: { channelId },
-              updateQuery: (prev, { subscriptionData }) => {
-                if (!subscriptionData.data) return prev
-                const newMessages = subscriptionData.data.moreMessage.messages
-                return Object.assign({}, prev, {
-                  channel: {
-                    __typename: prev.channel.__typename,
-                    id: prev.channel.id,
-                    name: prev.channel.name,
-                    messages: [...newMessages, ...prev.channel.messages]
+        onLoadMore={() => {
+          if (data.listMessages && data.listMessages.cursor) {
+            fetchMore({
+              query: GET_MORE,
+              variables: {
+                channelId,
+                cursor: data.listMessages.cursor
+              },
+              updateQuery: (prev, { fetchMoreResult }) => {
+                const newMessages = fetchMoreResult.listMessages.messages
+                return {
+                  listMessages: {
+                    __typename: prev.listMessages.__typename,
+                    messages: [...prev.listMessages.messages, ...newMessages],
+                    cursor: fetchMoreResult.listMessages.cursor
                   }
-                })
+                }
               }
-            })}
+            })
+          }
+        }}
       />}
   </Query>
 
@@ -155,9 +155,7 @@ const Window = () => {
   return (
     <Query query={GET_CURRENT_CHANNEL}>
       {({ data: { clientInfo: { currentChannel } } }) => {
-        return ( <MessageQuery channelId={currentChannel} />
-        
-        ) 
+        return <MessageQuery channelId={currentChannel} />
       }}
     </Query>
   )
@@ -165,4 +163,6 @@ const Window = () => {
 
 export default Window
 
-        {/* <Header channelId={currentChannel} /> */}
+{
+  /* <Header channelId={currentChannel} /> */
+}

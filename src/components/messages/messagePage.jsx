@@ -2,7 +2,7 @@ import React from "react";
 import Message from "./message";
 import colors from "../../style/colors";
 import styled from "styled-components";
-
+import Waypoint from "react-waypoint";
 const ScrollContainer = styled.div`
   background-color: ${colors.background};
   height: 100%;
@@ -11,7 +11,7 @@ const ScrollContainer = styled.div`
   overflow-x: hidden;
 `;
 
-export default class MessagePage extends React.Component {
+class MessagePage extends React.Component {
   constructor(props) {
     super(props);
     this.messagesEnd = React.createRef();
@@ -20,47 +20,58 @@ export default class MessagePage extends React.Component {
   componentDidMount() {
     this.props.subscribeToNewMessages();
     this.props.subscribeToUpdate();
-    this.scrollToBottom("instant");
   }
 
   scrollToBottom = behavior => {
     this.messagesEnd.current.scrollIntoView({ behavior });
   };
 
-  componentDidUpdate() {
-    this.scrollToBottom("instant");
+  componentDidUpdate(prevProps) {
+    console.log(prevProps);
+    if (prevProps.loading) {
+      this.scrollToBottom("instant");
+    }
+    const { data, currentChannel } = this.props;
+    if (
+      prevProps.data &&
+      prevProps.data.listMessages &&
+      data &&
+      data.listMessages
+    ) {
+      if (
+        prevProps.data.listMessages.messages.length + 1 ===
+        data.listMessages.messages.length
+      ) {
+        this.scrollToBottom("instant");
+      }
+    }
+    if(prevProps.currentChannel !== currentChannel) {
+      this.scrollToBottom("instant");
+    }
   }
 
   renderData() {
     const { loading, error, data } = this.props;
     if (loading) return <p> loading .. </p>;
     if (error) return <p> error! :( </p>;
-    return data.channel.messages.map(message => {
-      return <Message key={message.id} {...message} />;
+    if(!data.listMessages) return <p> loading .. </p>; 
+    const reversed = [...data.listMessages.messages].reverse();
+    return reversed.map((message, i) => {
+      return <Message key={`${message.id}_${i}`} {...message} />;
     });
   }
 
   render() {
     return (
-        <ScrollContainer>
-          {this.renderData()}
-          <div
-            style={{ float: "left", clear: "both" }}
-            ref={this.messagesEnd}
-          />
-        </ScrollContainer>
+      <ScrollContainer id={"infi_scroll_target"}>
+        <Waypoint onEnter={this.props.onLoadMore} />
+        {this.renderData()}
+        <div style={{ float: "left", clear: "both" }} ref={this.messagesEnd} />
+      </ScrollContainer>
     );
   }
 }
 
-// this component triggers react rerender on each scroll.
-//        // <ScrollArea
-//     style={{backgroundColor: colors.background, boxSizing: "border-box"}}
-//     speed={0.8}
-//     className="area"
-//     contentClassName="content"
-//     horizontal={false}
-//     >
-{
-  /* </ScrollArea> */
-}
+export default MessagePage;
+
+//scroll area <- this component triggers react rerender on each scroll.
