@@ -3,7 +3,6 @@ import Edited from './edited'
 import EditButton from './editButton'
 import Avatar from './avatar'
 import styled from 'styled-components'
-import insertedAt from './InsertedAt'
 import InsertedAt from './InsertedAt'
 import colors from '../../style/colors'
 
@@ -36,8 +35,7 @@ const Message = ({
   user,
   insertedAt,
   message,
-  edited,
-  isLoggedIn
+  edited
 }) => {
   const renderEdit = () => {
     console.log(userId)

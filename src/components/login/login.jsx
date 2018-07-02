@@ -1,6 +1,6 @@
 import React from "react";
 import GithubConfig from "../../apollo/github";
-import queryString from "query-string";
+import queryString from "../../utility/queryParser";
 import styled from "styled-components";
 import colors from "../../style/colors";
 

@@ -1,7 +1,4 @@
 import React, { Component } from 'react'
-import logo from './logo.svg'
-import { Query } from 'react-apollo'
-import gql from 'graphql-tag'
 import './App.css'
 import ChatPage from './pages/chatPage'
 import LoginPage from './pages/loginPage'

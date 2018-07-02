@@ -10,7 +10,6 @@ import { onError } from 'apollo-link-error'
 import { ApolloLink, split } from 'apollo-link'
 import { ApolloProvider } from 'react-apollo'
 import { withClientState } from 'apollo-link-state';
-import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 import * as AbsintheSocket from "@absinthe/socket";
 import { createAbsintheSocketLink } from "@absinthe/socket-apollo-link";

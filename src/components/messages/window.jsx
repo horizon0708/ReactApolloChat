@@ -2,8 +2,6 @@ import React from 'react'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import MessagePage from './messagePage'
-import { subscribe } from 'graphql'
-import Header from './header'
 
 const GET_MESSAGES = gql`
   query($channelId: ID!) {
@@ -166,7 +164,3 @@ const Window = () => {
 }
 
 export default Window
-
-{
-  /* <Header channelId={currentChannel} /> */
-}

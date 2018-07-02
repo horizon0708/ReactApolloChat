@@ -1,5 +1,5 @@
 import React from "react";
-import queryString from "query-string";
+import queryString from "../utility/queryParser";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import OnLogin from './onLogin'
@@ -59,7 +59,6 @@ class Index extends React.Component {
         <Query query={LOG_IN} variables={{ code }}>
           {({ error, loading, data }) => {
             if (error) {
-              console.log(error)
               return <Container> <ErrorMessage /> </Container>;
             } // push to error page??
             if (loading) return <Container> <Loading message={"Logging you in!"} /> </Container>;

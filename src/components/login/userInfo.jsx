@@ -27,6 +27,7 @@ const Container = styled.div`
 `
 const InfoContainer = styled.div`display: flex;
   margin-bottom: 1rem;
+  color: ${colors.textLight};
 `
 const Name = styled.div`
   display: flex;
@@ -41,7 +42,7 @@ const UserInfo = ({ id }) => {
       <Query query={GET_USER} variables={{ id }}>
         {({ loading, error, data }) => {
           if (loading) return <p>loading</p>
-          if (error) return <p>error</p>
+          if (error) return <InfoContainer>error</InfoContainer>
           return (
             <InfoContainer>
               <Image src={data.user.avatarUrl} alt='avatar' />

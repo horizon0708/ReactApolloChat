@@ -1,17 +1,10 @@
 import React from 'react'
-import { Query, Mutation } from 'react-apollo'
+import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import { GET_CLIENT_INFO } from '../../apollo/sharedGql'
 import CreateMessage from './createMessage'
 import EditMessage from './editMessage'
 
-const ADD_MESSAGE = gql`
-  mutation($message: String!, $channelId: ID!, $userId: ID!) {
-    createMessage(message: $message, channelId: $channelId, userId: $userId) {
-      id
-    }
-  }
-`
 
 const GET_MESSAGE = gql`
   query($id: ID!) {
@@ -23,7 +16,6 @@ const GET_MESSAGE = gql`
 
 export default class extends React.Component {
   render () {
-    let input
     return (
       <Query query={GET_CLIENT_INFO}>
         {({
