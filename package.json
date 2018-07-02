@@ -15,7 +15,6 @@
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "moment": "^2.22.2",
-    "query-string": "^6.1.0",
     "react": "^16.4.1",
     "react-burger-menu": "^2.5.2",
     "react-dom": "^16.4.1",
