@@ -7,7 +7,7 @@ import Login from '../components/login'
 import colors from '../style/colors'
 import Header from '../components/messages/header'
 import { slide as Menu } from 'react-burger-menu'
-
+import Info from '../components/info/info'
 const Layout = styled.div`
   display: flex;
   height: 100vh;
@@ -64,12 +64,18 @@ export default class extends React.Component {
           customBurgerIcon={ false }
         >
           <ChatChannel />
+          <div>
+            <Info />
           <Login />
+          </div>
         </Menu>
         <Layout>
           <LeftColumn>
             <ChatChannel />
+            <div>
+            <Info/>
             <Login />
+            </div>
           </LeftColumn>
 
           <VerticalFlex>

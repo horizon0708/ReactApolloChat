@@ -2,6 +2,7 @@ import React from 'react'
 import ChannelItem from './channelItem'
 import styled from 'styled-components'
 import colors from '../../style/colors'
+import ErrorMessage from '../icons/error';
 
 const Container = styled.div`background-color: ${colors.backgroundDark};`
 
@@ -17,7 +18,7 @@ const Channels = styled.div`padding: 1rem;`
 export default class extends React.Component {
   render () {
     const { error, loading, data } = this.props
-    if (error) return <p>error!</p>
+    if (error) return <ErrorMessage />
     if (loading) return <p>loading!</p>
     const { channels, clientInfo: { currentChannel } } = data
     

@@ -5,13 +5,15 @@ import gql from "graphql-tag";
 import OnLogin from './onLogin'
 import styled from 'styled-components'
 import colors from '../style/colors';
-
+import ErrorMessage from '../components/icons/error'
+import Loading from '../components/icons/loading'
 const Container = styled.div`
   height: 100vh;
   width: 100vw;
   font-size: 1.5rem;
   background-color: ${colors.background};
   display: flex;
+  justify-content: center;
   text-align: center;
 `
 
@@ -58,9 +60,9 @@ class Index extends React.Component {
           {({ error, loading, data }) => {
             if (error) {
               console.log(error)
-              return <Container> error </Container>;
+              return <Container> <ErrorMessage /> </Container>;
             } // push to error page??
-            if (loading) return <Container> logging you in .. </Container>;
+            if (loading) return <Container> <Loading message={"Logging you in!"} /> </Container>;
             // save token to local storage
             // set current user
             return <OnLogin history={history} data={data} /> 

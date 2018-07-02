@@ -3,6 +3,10 @@ import Message from "./message";
 import colors from "../../style/colors";
 import styled from "styled-components";
 import Waypoint from "react-waypoint";
+import ErrorMessage from '../icons/error';
+import LoadingSpinner from '../icons/loading';
+
+
 const ScrollContainer = styled.div`
   background-color: ${colors.background};
   height: 100%;
@@ -40,8 +44,7 @@ class MessagePage extends React.Component {
     ) {
       if (
         prevProps.data.listMessages.messages.length + 1 ===
-        data.listMessages.messages.length
-      ) {
+        data.listMessages.messages.length) {
         this.scrollToBottom("instant");
       }
     }
@@ -52,9 +55,9 @@ class MessagePage extends React.Component {
 
   renderData() {
     const { loading, error, data, userId } = this.props;
-    if (loading) return <p> loading .. </p>;
-    if (error) return <p> error! :( </p>;
-    if(!data.listMessages) return <p> loading .. </p>; 
+    if (loading) return <LoadingSpinner />
+    if (error) return <ErrorMessage /> 
+    if(!data.listMessages) return <LoadingSpinner /> 
     const reversed = [...data.listMessages.messages].reverse();
     return reversed.map((message, i) => {
       return <Message userId={userId} key={`${message.id}_${i}`} {...message} />;

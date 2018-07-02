@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
 import styled from 'styled-components'
 import colors from '../style/colors';
+import Loading from '../components/icons/loading';
 
 const Container = styled.div`
   height: 100vh;
@@ -40,7 +41,7 @@ export default graphql(ASSIGN_USER)(
     }
 
     render () {
-      return <Container>redirecting ...</Container>
+      return <Container><Loading /></Container>
     }
   }
 )
