@@ -1,7 +1,7 @@
 // fails to minify on build
 
-const strictUriEncode = require('strict-uri-encode');
-const decodeComponent = require('decode-uri-component');
+const strictUriEncode = require('./strictUriEncode');
+const decodeComponent = require('./decodeUri');
 
 function encoderForArrayFormat(options) {
 	switch (options.arrayFormat) {

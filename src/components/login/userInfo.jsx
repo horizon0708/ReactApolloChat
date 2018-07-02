@@ -42,7 +42,10 @@ const UserInfo = ({ id }) => {
       <Query query={GET_USER} variables={{ id }}>
         {({ loading, error, data }) => {
           if (loading) return <p>loading</p>
-          if (error) return <InfoContainer>error</InfoContainer>
+          if (error) {
+            localStorage.removeItem("auth_token");
+            return <InfoContainer>error</InfoContainer>
+          } 
           return (
             <InfoContainer>
               <Image src={data.user.avatarUrl} alt='avatar' />
