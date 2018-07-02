@@ -79,16 +79,20 @@ const GET_CURRENT_CHANNEL = gql`
   query {
     clientInfo @client {
       currentChannel
+      currentUser {
+        id
+      }
     }
   }
 `
 
-const MessageQuery = ({ channelId }) =>
+const MessageQuery = ({ channelId, userId }) =>
   <Query query={GET_MESSAGES} variables={{ channelId }}>
     {({ subscribeToMore, ...result, fetchMore, data }) =>
       <MessagePage
         {...result}
         data={data}
+        userId={userId}
         currentChannel={channelId}
         subscribeToNewMessages={() =>
           subscribeToMore({
@@ -154,8 +158,8 @@ const MessageQuery = ({ channelId }) =>
 const Window = () => {
   return (
     <Query query={GET_CURRENT_CHANNEL}>
-      {({ data: { clientInfo: { currentChannel } } }) => {
-        return <MessageQuery channelId={currentChannel} />
+      {({ data: { clientInfo: { currentChannel, currentUser } } }) => {
+        return <MessageQuery channelId={currentChannel} userId={currentUser.id}/>
       }}
     </Query>
   )

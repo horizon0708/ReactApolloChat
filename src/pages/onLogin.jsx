@@ -1,6 +1,17 @@
 import React from 'react'
 import gql from 'graphql-tag'
 import { graphql } from 'react-apollo'
+import styled from 'styled-components'
+import colors from '../style/colors';
+
+const Container = styled.div`
+  height: 100vh;
+  width: 100vw;
+  font-size: 1.5rem;
+  background-color: ${colors.background};
+  display: flex;
+  text-align: center;
+`
 
 const ASSIGN_USER = gql`
   mutation($id: ID!, $name: String!) {
@@ -29,7 +40,7 @@ export default graphql(ASSIGN_USER)(
     }
 
     render () {
-      return <p>redirecting ...</p>
+      return <Container>redirecting ...</Container>
     }
   }
 )

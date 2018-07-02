@@ -11,6 +11,15 @@ const Header = styled.div`
   border-bottom: 2px solid ${colors.backgroundDarker};
   text-align: left;
   background-color: ${colors.background};
+  display: flex;
+  justify-content: space-between;
+`
+
+const Icon = styled.i`
+  display: none;
+  @media (max-width: 600px) {
+    display: inline; 
+  }
 `
 
 const GET_CHANNEL_NAME = gql`
@@ -30,9 +39,10 @@ const GET_CURRENT_CHANNEL = gql`
   }
 `
 
-const Head = () => {
+const Head = ({ updateMenu}) => {
   return (
     <Header>
+      <Icon className="fa fa-bars" aria-hidden="true" onClick={()=>updateMenu(true)}></Icon>
       <Query query={GET_CURRENT_CHANNEL}>
         {({ error, loading, data }) => {
           if (error) return null
@@ -50,9 +60,9 @@ const Head = () => {
                 )
               }}
             </Query>
-          
         }}
       </Query>
+          <span>{" "}</span> 
     </Header>
   )
 }

@@ -3,6 +3,18 @@ import queryString from "query-string";
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
 import OnLogin from './onLogin'
+import styled from 'styled-components'
+import colors from '../style/colors';
+
+const Container = styled.div`
+  height: 100vh;
+  width: 100vw;
+  font-size: 1.5rem;
+  background-color: ${colors.background};
+  display: flex;
+  text-align: center;
+`
+
 
 const LOG_IN = gql`
   query($code: String!) {
@@ -46,10 +58,9 @@ class Index extends React.Component {
           {({ error, loading, data }) => {
             if (error) {
               console.log(error)
-              // history.push("/");
-              return <p> error </p>;
+              return <Container> error </Container>;
             } // push to error page??
-            if (loading) return <p> logging you in .. </p>;
+            if (loading) return <Container> logging you in .. </Container>;
             // save token to local storage
             // set current user
             return <OnLogin history={history} data={data} /> 

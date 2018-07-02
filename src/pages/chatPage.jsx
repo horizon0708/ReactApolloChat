@@ -6,11 +6,12 @@ import styled from 'styled-components'
 import Login from '../components/login'
 import colors from '../style/colors'
 import Header from '../components/messages/header'
+import { slide as Menu } from 'react-burger-menu'
 
 const Layout = styled.div`
-display: flex;
-height: 100vh;
-width: 100vw;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
 `
 const VerticalFlex = styled.div`
   display: flex;
@@ -25,22 +26,59 @@ const LeftColumn = styled.div`
   justify-content: space-between;
   width: 250px;
   background-color: ${colors.backgroundDark};
+  @media (max-width: 600px) {
+    display: none;
+  }
 `
 
 export default class extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      menuOpen: false
+    }
+  }
+
+  handleStateChange (state) {
+    this.setState({ menuOpen: state.isOpen })
+  }
+
+  closeMenu () {
+    this.setState({ menuOpen: false })
+  }
+
+  updateMenu = (isOpen)=> {
+    this.setState({ menuOpen: isOpen })
+  }
+
+  toggleMenu () {
+    this.setState({ menuOpen: !this.state.menuOpen })
+  }
+
   render () {
     return (
-      <Layout>
-        <LeftColumn>
-        <ChatChannel />
-        <Login />
-          </LeftColumn> 
-        <VerticalFlex>
-          <Header />
-          <ChatWindow />
-          <ChatInput />
-        </VerticalFlex>
-      </Layout>
+      <div>
+        <Menu
+          isOpen={this.state.menuOpen}
+          onStateChange={state => this.handleStateChange(state)}
+          customBurgerIcon={ false }
+        >
+          <ChatChannel />
+          <Login />
+        </Menu>
+        <Layout>
+          <LeftColumn>
+            <ChatChannel />
+            <Login />
+          </LeftColumn>
+
+          <VerticalFlex>
+            <Header updateMenu={this.updateMenu} />
+            <ChatWindow />
+            <ChatInput />
+          </VerticalFlex>
+        </Layout>
+      </div>
     )
   }
 }

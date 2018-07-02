@@ -31,6 +31,7 @@ const MessageInfo = styled.div`
 `
 
 const Message = ({
+  userId,
   id,
   user,
   insertedAt,
@@ -38,6 +39,14 @@ const Message = ({
   edited,
   isLoggedIn
 }) => {
+  const renderEdit = () => {
+    console.log(userId)
+    console.log(user.id);
+    return userId === user.id ?
+    <EditButton messageId={id} />:
+    null
+  }
+
   return (
     <ChatContainer>
       <Avatar avatarUrl={user.avatarUrl} />
@@ -55,7 +64,8 @@ const Message = ({
             </div>
             <Edited edited={edited} />
           </MessageContainer>
-          <EditButton messageId={id} />
+          {renderEdit()}
+          
         </MessageContainer>
       </div>
     </ChatContainer>

@@ -14,7 +14,7 @@ const ADD_MESSAGE = gql`
 `
 
 const GET_MESSAGE = gql`
-  query($id: ID!, $channelId: ID!) {
+  query($id: ID!) {
     message(id: $id) {
       message
     }

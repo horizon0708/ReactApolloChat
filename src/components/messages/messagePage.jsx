@@ -51,13 +51,13 @@ class MessagePage extends React.Component {
   }
 
   renderData() {
-    const { loading, error, data } = this.props;
+    const { loading, error, data, userId } = this.props;
     if (loading) return <p> loading .. </p>;
     if (error) return <p> error! :( </p>;
     if(!data.listMessages) return <p> loading .. </p>; 
     const reversed = [...data.listMessages.messages].reverse();
     return reversed.map((message, i) => {
-      return <Message key={`${message.id}_${i}`} {...message} />;
+      return <Message userId={userId} key={`${message.id}_${i}`} {...message} />;
     });
   }
 
