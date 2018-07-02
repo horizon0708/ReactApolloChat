@@ -57,6 +57,25 @@ const MESSAGES_SUBSCRIPTION_UPDATE = gql`
   }
 `
 
+const MESSAGES_SUBSCRIPTION_MORE = gql`
+  subscription($channelId: ID!) {
+    moreMessage(channelId: $channelId) {
+      messages{
+        user {
+          name
+          id
+          avatarUrl
+        }
+        id
+        message
+        edited
+        insertedAt
+      }
+      cursor
+    }
+  }
+`
+
 const GET_CURRENT_CHANNEL = gql`
   query {
     clientInfo @client {
@@ -112,6 +131,23 @@ const MessageQuery = ({ channelId }) =>
               })
             }
           })}
+          subscribeToUpdate={() =>
+            subscribeToMore({
+              document: MESSAGES_SUBSCRIPTION_MORE,
+              variables: { channelId },
+              updateQuery: (prev, { subscriptionData }) => {
+                if (!subscriptionData.data) return prev
+                const newMessages = subscriptionData.data.moreMessage.messages
+                return Object.assign({}, prev, {
+                  channel: {
+                    __typename: prev.channel.__typename,
+                    id: prev.channel.id,
+                    name: prev.channel.name,
+                    messages: [...newMessages, ...prev.channel.messages]
+                  }
+                })
+              }
+            })}
       />}
   </Query>
 
