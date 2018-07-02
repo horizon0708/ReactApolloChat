@@ -17,8 +17,8 @@ import { Socket as PhoenixSocket } from "phoenix";
 import clientState from './apollo/localState';
 import { BrowserRouter } from 'react-router-dom'
 
-const HTTP_URI = 'http://localhost:4000/api';
-const SOCKET_URI = 'ws://localhost:4000/socket';
+const HTTP_URI = 'http://159.89.132.99:4000/api';
+const SOCKET_URI = 'http://159.89.132.99:4000/socket';
 const HTTP_CREDENTIALS = 'same-origin';
 const cache = new InMemoryCache();
 

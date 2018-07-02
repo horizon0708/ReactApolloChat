@@ -40,8 +40,8 @@ const Info = () => {
     <div><Icon className="fa fa-info-circle" aria-hidden="true"></Icon>
 </div>
     <TextBox>This is a demo chat app made with React, ApolloJS, Graphql and Elixir</TextBox>
-    <A href="#"> FrontEnd Repo </A>
-    <A href="#"> BackEnd Repo </A>
+    <A href="https://github.com/horizon0708/ReactApolloChat"> FrontEnd Repo </A>
+    <A href="https://github.com/horizon0708/ElixirGraphqlChat"> BackEnd Repo </A>
   </Container>
 }
 
