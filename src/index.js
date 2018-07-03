@@ -18,7 +18,7 @@ import clientState from './apollo/localState';
 import { BrowserRouter } from 'react-router-dom'
 
 const HTTP_URI = 'http://159.89.132.99:4000/api';
-const SOCKET_URI = 'http://159.89.132.99:4000/socket';
+const SOCKET_URI = 'ws://159.89.132.99:4000/socket';
 const HTTP_CREDENTIALS = 'same-origin';
 const cache = new InMemoryCache();
 
@@ -52,11 +52,12 @@ const client = new ApolloClient({
   link: ApolloLink.from([
     onError(({ graphQLErrors, networkError }) => {
       if (graphQLErrors) {
-        graphQLErrors.map(({ message, locations, path }) =>
-          console.log(
-            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-          )
-        )
+        console.log(graphQLErrors)
+        // graphQLErrors.map(({ message, locations, path }) =>
+        //   console.log(
+        //     `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+        //   )
+        // )
       }
       if (networkError) console.log(`[Network error]: ${networkError}`)
     }),

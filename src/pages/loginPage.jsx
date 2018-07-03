@@ -39,6 +39,7 @@ class Index extends React.Component {
     const { search } = this.props.location;
     if (search) {
       const param = queryString.parse(search);
+      console.log(param);
       if (param.code) {
         this.setState({ code: param.code });
       } else {

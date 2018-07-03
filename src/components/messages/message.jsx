@@ -57,7 +57,7 @@ const Message = ({
         </MessageInfo>
         <MessageContainer>
           <MessageContainer>
-            <div>
+            <div style={{textAlign: 'left'}}>
               {message}
             </div>
             <Edited edited={edited} />
