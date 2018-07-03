@@ -1,8 +1,7 @@
 import moment from 'moment'
 
 export const parseDate = dateString => {
-
- const time = moment(dateString).format('LT');
+ const time = moment(dateString).add(12,'h').format('LT');
 
  const date = moment(dateString).calendar(null, {
     // when the date is closer, specify custom values
